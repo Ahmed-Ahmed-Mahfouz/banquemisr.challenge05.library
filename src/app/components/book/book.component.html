@@ -1,0 +1,20 @@
+<div
+  class="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+  <img class="object-cover w-full h-64 md:h-64 md:w-40 md:rounded-none md:rounded-l-lg cursor-pointer"
+    [src]="book.cover_id ? 'https://covers.openlibrary.org/b/id/' + book.cover_id + '-M.jpg' : 'assets/images/placeholder.jpeg'"
+    alt="Book Cover" (click)="navigateToDetails()" onerror="this.src='assets/placeholder.png'">
+  <div class="flex flex-col justify-between p-6 leading-normal h-64 w-full">
+    <div>
+      <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">{{ book.first_publish_year ||
+        'Unknown' }}</h5>
+      <h5 class="mb-2 font-bold tracking-tight text-gray-900 dark:text-white cursor-pointer"
+        (click)="navigateToDetails()">{{ book.title || 'Unknown Title' }}</h5>
+      <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{ authorsList }}</p>
+    </div>
+    <div class="mt-auto flex justify-end space-x-4">
+      <a class="text-blue-600 dark:text-blue-500 cursor-pointer" (click)="navigateToDetails()">More</a>
+      <p>|</p>
+      <a class="text-blue-600 dark:text-blue-500 cursor-pointer" (click)="navigateToWishlist()">Wishlist</a>
+    </div>
+  </div>
+</div>
