@@ -22,6 +22,12 @@
         </p>
         <p class="mb-4 font-bold text-gray-700 dark:text-gray-400">No. Of Pages (First Edition): {{ book.numberOfPages
           || 'Unknown' }}</p>
+        <button (click)="toggleWishlist()" [ngClass]="{
+    'bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-900': !isInWishlist,
+    'bg-red-700 hover:bg-red-800 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900': isInWishlist
+  }" class="focus:outline-none text-white font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">
+          {{ isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist' }}
+        </button>
       </div>
     </div>
   </div>

@@ -9,17 +9,16 @@
   <div *ngIf="wishlist.length > 0" class="grid grid-cols-1 md:grid-cols-3 gap-4">
     <div *ngFor="let book of wishlist"
       class="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
-      <img class="object-cover w-full h-64 md:h-64 md:w-40 md:rounded-none md:rounded-l-lg cursor-pointer"
+      <img class="object-cover w-full h-64 md:h-64 md:w-40 md:rounded-none md:rounded-l-lg"
         [src]="book.cover_id ? 'https://covers.openlibrary.org/b/id/' + book.cover_id + '-M.jpg' : 'assets/images/placeholder.jpeg'"
         alt="Book Cover">
       <div class="flex flex-col justify-between p-6 leading-normal h-64 w-full">
         <div>
           <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">{{ book.first_publish_year ||
             'Unknown' }}</h5>
-          <h5 class="mb-2 font-bold tracking-tight text-gray-900 dark:text-white cursor-pointer">{{ book.title ||
+          <h5 class="mb-2 font-bold tracking-tight text-gray-900 dark:text-white">{{ book.title ||
             'Unknown Title' }}</h5>
-          <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 cursor-pointer"
-            *ngFor="let author of book.authors">
+          <p class="mb-3 font-normal text-gray-700 dark:text-gray-400" *ngFor="let author of book.authors">
             {{ author.name || 'Unknown' }}
           </p>
         </div>

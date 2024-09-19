@@ -117,7 +117,22 @@ export class BookService {
     );
   }
 
-  searchBooks(query: string) {
-    return this.http.get(`${this.apiUrl}/search.json?q=${query}`);
+  getBooksBySearchKey(
+    searchKey: string,
+    query: string,
+    limit: number = 9
+  ): Observable<any> {
+    const url = `${this.apiUrl}/search.json?${searchKey}=${query}&limit=${limit}`;
+    return this.http.get(url).pipe(
+      map((response: any) => {
+        return response.docs.slice(0, limit).map((book: any) => ({
+          title: book.title,
+          author: book.author_name?.[0] || 'Unknown Author',
+          publishYear: book.first_publish_year || 'Unknown Year',
+          coverId: book.cover_i || null,
+          workKey: book.key,
+        }));
+      })
+    );
   }
 }
