@@ -1,34 +1,31 @@
-<div class="max-w-screen-xl mx-auto p-8">
+<div class="max-w-screen-xl mx-auto p-8" *ngIf="author">
   <h1
     class="mb-10 text-5xl font-extrabold leading-none tracking-tight text-gray-900 md:text-6xl lg:text-7xl dark:text-white">
-    Author Name
+    {{ author.name }}
   </h1>
-
   <div class="flex flex-col md:flex-row items-start lg:gap-16 gap-8">
-    <img class="h-auto w-full md:w-1/2 lg:w-1/3" src="https://placehold.co/600x400" alt="image description">
+    <img class="h-96 w-full md:w-1/2 lg:w-1/3"
+      [src]="author.image !== 'No image available' ? 'https://covers.openlibrary.org/b/id/' + author.image + '-M.jpg' : 'assets/images/noImageAvailable.jpg'"
+      alt="Author Image">
     <div class="flex flex-col justify-between leading-normal w-full md:w-1/2 lg:w-2/3">
       <div>
-        <h5 class="mb-6 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Birth Date: 1/1/1111</h5>
-        <h5 class="mb-6 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Top Work of the Author</h5>
-        <p class="mb-6 text-2xl font-normal text-gray-700 dark:text-gray-400">Work Count: 3</p>
-        <p class="mb-6 text-2xl font-normal text-gray-700 dark:text-gray-400">Top Subjects of the Author: </p>
-        <div class="flex flex-wrap gap-2">
-          <span
-            class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">Subject
-            1</span>
-          <span
-            class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">Subject
-            2</span>
-          <span
-            class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">Subject
-            3</span>
-          <span
-            class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">Subject
-            4</span>
-          <span
-            class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">Subject
-            5</span>
-        </div>
+        <h5 class="mb-6 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Birth Date: {{
+          author.birthDate }}
+        </h5>
+        <h5 class="mb-6 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Top Work: {{
+          author.topWorkTitle }}
+        </h5>
+        <p class="mb-6 text-2xl font-bold text-gray-700 dark:text-gray-400">Work Count: {{ author.workCount }}</p>
+        <ng-container *ngIf="author.subjects?.length > 0">
+          <p class="mb-6 text-2xl font-bold text-gray-700 dark:text-gray-400">Top Subjects</p>
+          <div class="flex flex-wrap gap-2">
+            <span *ngFor="let subject of author.subjects"
+              class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+              {{ subject }}
+            </span>
+          </div>
+        </ng-container>
+
       </div>
     </div>
   </div>

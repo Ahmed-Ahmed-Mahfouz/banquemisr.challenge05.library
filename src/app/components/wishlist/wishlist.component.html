@@ -3,7 +3,30 @@
     class="mb-10 text-2xl font-extrabold leading-none tracking-tight text-gray-900 md:text-3xl lg:text-4xl dark:text-white">
     My Wishlist
   </h1>
-
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+  <div *ngIf="wishlist.length === 0" class="flex justify-center items-center h-64">
+    <p class="text-xl font-bold text-gray-700 dark:text-gray-400">No books in the Wishlist!</p>
+  </div>
+  <div *ngIf="wishlist.length > 0" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div *ngFor="let book of wishlist"
+      class="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+      <img class="object-cover w-full h-64 md:h-64 md:w-40 md:rounded-none md:rounded-l-lg cursor-pointer"
+        [src]="book.cover_id ? 'https://covers.openlibrary.org/b/id/' + book.cover_id + '-M.jpg' : 'assets/images/placeholder.jpeg'"
+        alt="Book Cover">
+      <div class="flex flex-col justify-between p-6 leading-normal h-64 w-full">
+        <div>
+          <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">{{ book.first_publish_year ||
+            'Unknown' }}</h5>
+          <h5 class="mb-2 font-bold tracking-tight text-gray-900 dark:text-white cursor-pointer">{{ book.title ||
+            'Unknown Title' }}</h5>
+          <p class="mb-3 font-normal text-gray-700 dark:text-gray-400 cursor-pointer"
+            *ngFor="let author of book.authors">
+            {{ author.name || 'Unknown' }}
+          </p>
+        </div>
+        <button type="button" (click)="removeFromWishlist(book)"
+          class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Remove
+          book</button>
+      </div>
+    </div>
   </div>
 </div>
