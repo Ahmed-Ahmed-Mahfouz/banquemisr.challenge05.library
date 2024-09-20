@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -6,6 +7,13 @@ import { Injectable } from '@angular/core';
 export class WishlistService {
   private wishlist: any[] = [];
   private storageKey = 'wishlist';
+
+  // BehaviorSubject to track toast visibility and message
+  private toastMessageSubject = new BehaviorSubject<{
+    message: string;
+    icon: 'success' | 'warning';
+  }>({ message: '', icon: 'success' });
+  toastMessage$ = this.toastMessageSubject.asObservable();
 
   constructor() {
     this.loadWishlist();
@@ -18,11 +26,11 @@ export class WishlistService {
   addToWishlist(book: any) {
     try {
       if (this.isInWishlist(book)) {
-        this.showToast('toast-warning');
+        this.showToast('Book is already in the wishlist.', 'warning');
       } else {
         this.wishlist.push(book);
         this.saveWishlist();
-        this.showToast('toast-success');
+        this.showToast('Book added to Wishlist successfully.', 'success');
       }
     } catch (error) {
       console.error('Error adding to wishlist:', error);
@@ -66,17 +74,11 @@ export class WishlistService {
     }
   }
 
-  private showToast(toastId: string) {
-    try {
-      const toast = document.getElementById(toastId);
-      if (toast) {
-        toast.classList.remove('hidden');
-        setTimeout(() => {
-          toast.classList.add('hidden');
-        }, 3000);
-      }
-    } catch (error) {
-      console.error('Error showing toast:', error);
-    }
+  private showToast(message: string, icon: 'success' | 'warning') {
+    this.toastMessageSubject.next({ message, icon });
+  }
+
+  clearToastMessage() {
+    this.toastMessageSubject.next({ message: '', icon: 'success' });
   }
 }
