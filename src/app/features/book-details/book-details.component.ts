@@ -1,21 +1,22 @@
-import { map } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BookService } from '../../core/services/book.service';
 import { WishlistService } from '../../core/services/wishlist.service';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
+import { SharedModule } from '../../shared/shared.module';
 
 @Component({
   selector: 'app-book-details',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, SharedModule],
   templateUrl: './book-details.component.html',
   styleUrls: ['./book-details.component.css'],
 })
 export class BookDetailsComponent implements OnInit {
   book: any;
   isInWishlist: boolean = false;
+  isLoading: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -24,16 +25,18 @@ export class BookDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.isLoading = true;
     const workId = this.route.snapshot.paramMap.get('id');
     if (workId) {
       this.bookService.getBookDetails(workId).subscribe(
         (data) => {
-          console.log(data);
           this.book = data;
           this.isInWishlist = this.wishlistService.isInWishlist(this.book);
+          this.isLoading = false;
         },
         (error) => {
           console.error('Error fetching book details:', error);
+          this.isLoading = false;
         }
       );
     }

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { forkJoin, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { forkJoin, Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -15,13 +15,25 @@ export class BookService {
     subject: string = 'finance',
     limit: number = 9
   ): Observable<any> {
-    return this.http.get(
-      `${this.apiUrl}/subjects/${subject}.json?limit=${limit}`
-    );
+    return this.http
+      .get(`${this.apiUrl}/subjects/${subject}.json?limit=${limit}`)
+      .pipe(
+        catchError((error) => {
+          console.error('Error fetching books by subject:', error);
+          return of([]);
+        })
+      );
   }
 
   getBookDetails(workId: string): Observable<any> {
-    const bookDetails$ = this.http.get(`${this.apiUrl}/works/${workId}.json`);
+    const bookDetails$ = this.http
+      .get(`${this.apiUrl}/works/${workId}.json`)
+      .pipe(
+        catchError((error) => {
+          console.error('Error fetching book details:', error);
+          return of({});
+        })
+      );
 
     const editions$ = this.http
       .get(`${this.apiUrl}/works/${workId}/editions.json?limit=1`)
@@ -31,6 +43,10 @@ export class BookService {
           return {
             numberOfPages: edition?.number_of_pages || 'Unknown',
           };
+        }),
+        catchError((error) => {
+          console.error('Error fetching editions:', error);
+          return of({ numberOfPages: 'Unknown' });
         })
       );
 
@@ -40,10 +56,18 @@ export class BookService {
           (w: any) => w.key === `/works/${workId}`
         );
         return {
-          editionCount: work?.edition_count,
-          firstPublishYear: work?.first_publish_year,
-          authors: work?.authors?.map((author: any) => author.name),
+          editionCount: work?.edition_count || 'Unknown',
+          firstPublishYear: work?.first_publish_year || 'Unknown',
+          authors: work?.authors?.map((author: any) => author.name) || [],
         };
+      }),
+      catchError((error) => {
+        console.error('Error fetching subject details:', error);
+        return of({
+          editionCount: 'Unknown',
+          firstPublishYear: 'Unknown',
+          authors: [],
+        });
       })
     );
 
@@ -67,7 +91,15 @@ export class BookService {
             response.photos && response.photos.length > 0
               ? response.photos[0]
               : 'No image available',
-        }))
+        })),
+        catchError((error) => {
+          console.error('Error fetching author details:', error);
+          return of({
+            name: 'Unknown',
+            birthDate: 'Unknown',
+            image: 'No image available',
+          });
+        })
       );
 
     const topWorks$ = this.http
@@ -78,16 +110,22 @@ export class BookService {
           return {
             topWorkTitle: topWork?.title || 'Unknown',
           };
+        }),
+        catchError((error) => {
+          console.error('Error fetching top works:', error);
+          return of({ topWorkTitle: 'Unknown' });
         })
       );
 
     const workCount$ = this.http
       .get(`${this.apiUrl}/authors/${authorId}/works.json`)
       .pipe(
-        map((response: any) => {
-          return {
-            workCount: response?.entries.length || 0,
-          };
+        map((response: any) => ({
+          workCount: response?.entries.length || 0,
+        })),
+        catchError((error) => {
+          console.error('Error fetching work count:', error);
+          return of({ workCount: 0 });
         })
       );
 
@@ -99,11 +137,14 @@ export class BookService {
             .map((work: any) => work.subjects)
             .flat()
             .filter(Boolean);
-          // Slice to get up to 5 unique subjects
           const uniqueSubjects = [...new Set(subjects)].slice(0, 5);
           return {
             subjects: uniqueSubjects,
           };
+        }),
+        catchError((error) => {
+          console.error('Error fetching subjects:', error);
+          return of({ subjects: [] });
         })
       );
 
@@ -132,6 +173,10 @@ export class BookService {
           coverId: book.cover_i || null,
           workKey: book.key,
         }));
+      }),
+      catchError((error) => {
+        console.error('Error fetching books by search key:', error);
+        return of([]);
       })
     );
   }

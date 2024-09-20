@@ -29,12 +29,21 @@ export class AppComponent implements OnInit {
         this.isLoading = true;
       } else if (
         event instanceof NavigationEnd ||
-        event instanceof NavigationCancel ||
-        event instanceof NavigationError
+        event instanceof NavigationCancel
       ) {
         this.isLoading = false;
+      } else if (event instanceof NavigationError) {
+        this.isLoading = false;
+        console.error('Navigation Error:', event.error);
       }
     });
-    initFlowbite();
+
+    if (
+      typeof window !== 'undefined' &&
+      !(window as any)['flowbiteInitialized']
+    ) {
+      initFlowbite();
+      (window as any)['flowbiteInitialized'] = true;
+    }
   }
 }

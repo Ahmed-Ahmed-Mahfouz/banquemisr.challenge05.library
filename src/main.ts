@@ -5,10 +5,17 @@ import { HttpClientModule } from '@angular/common/http';
 import { CoreModule } from './app/core/core.module';
 import { provideRouter } from '@angular/router';
 import { routes } from './app/app.routes';
+import { environment } from './environments/environment';
 
 bootstrapApplication(AppComponent, {
   providers: [
     importProvidersFrom(HttpClientModule, CoreModule),
     provideRouter(routes),
   ],
-}).catch((err) => console.error(err));
+}).catch((err) => {
+  if (environment.production) {
+    console.error('An error occurred:', err);
+  } else {
+    console.error(err);
+  }
+});
