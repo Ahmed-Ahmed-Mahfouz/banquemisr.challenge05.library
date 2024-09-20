@@ -2,18 +2,27 @@ import { Component } from '@angular/core';
 import { BookService } from '../../core/services/book.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { SharedModule } from '../../shared/shared.module';
+
+interface Book {
+  title: string;
+  author: string;
+  publishYear: string;
+  coverId: number | null;
+  workKey: string;
+}
 
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, SharedModule],
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.css'],
 })
 export class SearchComponent {
   selectedCategory: string = '';
   searchQuery: string = '';
-  books: any[] = [];
+  books: Book[] = [];
   errorMessage: string = '';
   isDropdownOpen: boolean = false;
   isLoading: boolean = false;

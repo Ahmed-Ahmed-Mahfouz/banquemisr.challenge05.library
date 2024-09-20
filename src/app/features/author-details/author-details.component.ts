@@ -4,6 +4,15 @@ import { BookService } from '../../core/services/book.service';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../shared/shared.module';
 
+interface Author {
+  name: string;
+  birthDate: string;
+  topWorkTitle: string;
+  workCount: number;
+  subjects: string[];
+  image: string;
+}
+
 @Component({
   selector: 'app-author-details',
   standalone: true,
@@ -12,7 +21,7 @@ import { SharedModule } from '../../shared/shared.module';
   styleUrls: ['./author-details.component.css'],
 })
 export class AuthorDetailsComponent implements OnInit {
-  author: any;
+  author: Author | null = null;
   isLoading: boolean = false;
 
   constructor(
@@ -21,19 +30,23 @@ export class AuthorDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.fetchAuthorDetails();
+  }
+
+  fetchAuthorDetails(): void {
     this.isLoading = true;
     const authorId = this.route.snapshot.paramMap.get('id');
     if (authorId) {
-      this.bookService.getAuthorDetails(authorId).subscribe(
-        (data) => {
+      this.bookService.getAuthorDetails(authorId).subscribe({
+        next: (data) => {
           this.author = data;
           this.isLoading = false;
         },
-        (error) => {
+        error: (error) => {
           console.error('Error fetching author details:', error);
           this.isLoading = false;
-        }
-      );
+        },
+      });
     }
   }
 }
