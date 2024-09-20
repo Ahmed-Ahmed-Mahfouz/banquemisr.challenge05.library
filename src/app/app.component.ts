@@ -1,19 +1,40 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import {
+  NavigationCancel,
+  NavigationEnd,
+  NavigationError,
+  NavigationStart,
+  Router,
+  RouterOutlet,
+} from '@angular/router';
 import { initFlowbite } from 'flowbite';
-import { NavbarComponent } from './components/navbar/navbar.component';
+import { SharedModule } from './shared/shared.module';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavbarComponent],
+  imports: [RouterOutlet, SharedModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
   title = 'banquemisr.challenge05.library';
+  isLoading = false;
+
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        this.isLoading = true;
+      } else if (
+        event instanceof NavigationEnd ||
+        event instanceof NavigationCancel ||
+        event instanceof NavigationError
+      ) {
+        this.isLoading = false;
+      }
+    });
     initFlowbite();
   }
 }

@@ -1,8 +1,8 @@
 import { map } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { BookService } from '../../services/book.service';
-import { WishlistService } from '../../services/wishlist.service';
+import { BookService } from '../../core/services/book.service';
+import { WishlistService } from '../../core/services/wishlist.service';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 

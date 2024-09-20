@@ -1,14 +1,37 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './components/home/home.component';
-import { SearchComponent } from './components/search/search.component';
-import { WishlistComponent } from './components/wishlist/wishlist.component';
-import { BookDetailsComponent } from './components/book-details/book-details.component';
-import { AuthorDetailsComponent } from './components/author-details/author-details.component';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'search', component: SearchComponent },
-  { path: 'wishlist', component: WishlistComponent },
-  { path: 'book-details/:id', component: BookDetailsComponent },
-  { path: 'author-details/:id', component: AuthorDetailsComponent },
+  {
+    path: '',
+    loadComponent: () =>
+      import('./features/home/home.component').then((m) => m.HomeComponent),
+  },
+  {
+    path: 'search',
+    loadComponent: () =>
+      import('./features/search/search.component').then(
+        (m) => m.SearchComponent
+      ),
+  },
+  {
+    path: 'wishlist',
+    loadComponent: () =>
+      import('./features/wishlist/wishlist.component').then(
+        (m) => m.WishlistComponent
+      ),
+  },
+  {
+    path: 'book-details/:id',
+    loadComponent: () =>
+      import('./features/book-details/book-details.component').then(
+        (m) => m.BookDetailsComponent
+      ),
+  },
+  {
+    path: 'author-details/:id',
+    loadComponent: () =>
+      import('./features/author-details/author-details.component').then(
+        (m) => m.AuthorDetailsComponent
+      ),
+  },
 ];

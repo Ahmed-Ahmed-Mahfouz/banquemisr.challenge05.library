@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { WishlistService } from '../../services/wishlist.service';
+import { WishlistService } from '../../core/services/wishlist.service';
 import Swal from 'sweetalert2';
 
 @Component({

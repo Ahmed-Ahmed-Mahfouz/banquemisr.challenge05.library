@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { BookService } from '../../services/book.service';
+import { BookService } from '../../core/services/book.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
